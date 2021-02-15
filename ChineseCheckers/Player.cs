@@ -8,59 +8,52 @@ namespace ChineseCheckers
 {
     public class Player
     {
-        private int _Id;
-        private string _Name;
-        private List<Coordinate> _StartCoordinates;
-        private List<Coordinate> _GoalCoordinates;
+        private int id;
+        private int number;
+        private string name;
+        private bool active;
+        private readonly List<Coordinate> startCoordinates;
+        private readonly List<Coordinate> goalCoordinates;
 
         public int Id
         {
-            get { return _Id; }
+            get { return id; }
         }
 
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value; }
+            get { return name; }
+            set { name = value; }
+        }
+
+        public int Number
+        {
+            get { return number; }
+            set { number = value; }
+        }
+
+        public bool Active
+        {
+            get { return active; }
+            set { active = value; }
         }
 
         public List<Coordinate> StartCoordinates
         {
-            get { return _StartCoordinates; }
-            set 
-            {
-                if (_StartCoordinates == null)
-                    _StartCoordinates = value;
-                else
-                    throw new InvalidOperationException("StartCoordinates can only be set one time");
-            }
+            get { return StartCoordinates; }
+            set { StartCoordinates = value; }
         }
         public List<Coordinate> GoalCoordinates
         {
-            get { return _GoalCoordinates; }
-            set
-            {
-                if (_GoalCoordinates == null)
-                    _GoalCoordinates = value;
-                else
-                    throw new InvalidOperationException("GoalCoordinates can only be set one time");
-            }
+            get { return GoalCoordinates; }
+            set { GoalCoordinates = value; }
         }
 
-        public Player(int id)
+        public Player(int id, List<Coordinate> startCoordinates, List<Coordinate> goalCoordinates)
         {
-            _Id = id;
-        }
-
-        public bool IsPlayerCoordinate(int i, int j)
-        {
-            foreach (Coordinate c in StartCoordinates)
-                if (c.i == i && c.j == j)
-                    return true;
-            foreach (Coordinate c in GoalCoordinates)
-                if (c.i == i && c.j == j)
-                    return true;
-            return false;
+            this.id = id;
+            this.startCoordinates = startCoordinates;
+            this.goalCoordinates = goalCoordinates;
         }
     }
 }

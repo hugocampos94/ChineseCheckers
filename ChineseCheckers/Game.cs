@@ -31,7 +31,7 @@ namespace ChineseCheckers
 
             int step = 1;
             Player player = null;
-            Player[] players = null;
+            int numPlayers = 0;
             Coordinate inputCoordinate = null;
             Coordinate highlight1 = null;
             Coordinate highlight2 = null;
@@ -45,9 +45,9 @@ namespace ChineseCheckers
                     case 1:
                         highlight1 = null;
                         highlight2 = null;
-                        players = GetPlayers();
-                        player = players[0];
-                        board = new Board(players);
+                        numPlayers = GetNumPlayers();
+                        board = new Board(numPlayers);
+                        player = board.GetPlayer(1);
                         step = 2;
                         continue;
                     case 2:
@@ -97,10 +97,20 @@ namespace ChineseCheckers
                         }
                         else
                         {
-                            if (player.Id > players.Length)
-                                player = players[0];
-                            else
-                                player = players[player.Id + 1];
+                            var playerList = board.GetPlayerList();
+                            int i = player.Id < playerList.Count ? player.Id : 0;
+                            while(i != player.Id - 1)
+                            {
+                                if (playerList[i].Active)
+                                {
+                                    player = playerList[i];
+                                    break;
+                                }
+                                else
+                                {
+                                    i = i + 1 < playerList.Count ? i + 1 : 0;
+                                }
+                            }
                             step = 2;
                         }
                         continue;
@@ -117,21 +127,15 @@ namespace ChineseCheckers
             }
             
         }
-        public static Player[] GetPlayers()
+        public static int GetNumPlayers()
         {
-            Player[] players = null;
             while(true)
             {
                 Console.WriteLine("Please enter the number of players(2-6):");
                 var input = Console.ReadLine();
                 if(Regex.IsMatch(input, "^[23456]$"))
                 {
-                    players = new Player[int.Parse(input)];
-                    for(int i = 1; i <= players.Length; i++)
-                    {
-                        players[i-1] = new Player(i);
-                    }
-                    return players;
+                    return int.Parse(input);
                 }
                 else
                 {
@@ -171,11 +175,11 @@ namespace ChineseCheckers
             while (true)
             {
                 Console.WriteLine("List of available moves for Coordinate "
-                + $"{{{board.GetCharFromIndex(inputCoordinate.i)},{board.GetCharFromIndex(inputCoordinate.j)}}} :");
+                + $"{{{board.GetCharFromIndex(inputCoordinate.iInt)},{board.GetCharFromIndex(inputCoordinate.jInt)}}} :");
                 for (int i = 0; i < list.Count; i++)
                 {
                     var curr = list.ElementAt(i);
-                    Console.WriteLine($"{i + 1}{{{board.GetCharFromIndex(curr.i)},{board.GetCharFromIndex(curr.j)}}}");
+                    Console.WriteLine($"{i + 1}{{{board.GetCharFromIndex(curr.iInt)},{board.GetCharFromIndex(curr.jInt)}}}");
                 }
                 Console.WriteLine("Please enter the movement you want to perform");
                 input = Console.ReadLine().ToUpper();

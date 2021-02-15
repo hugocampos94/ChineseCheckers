@@ -8,18 +8,30 @@ namespace ChineseCheckers
 {
     public class Coordinate : IEquatable<Coordinate>
     {
-        private int _i;
-        private int _j;
+        private double _i;
+        private double _j;
+        private static int numDecimals = 3;
 
-        public int i { 
+        public double i
+        { 
             get { return _i; }
-            set { _i = value; }
+            set { _i = Math.Round(value, numDecimals); }
         }
 
-        public int j
+        public double j
         {
             get { return _j; }
-            set { _j = value; }
+            set { _j = Math.Round(value, numDecimals); }
+        }
+
+        public int iInt
+        {
+            get { return (int)Math.Round(_i); }
+        }
+
+        public int jInt
+        {
+            get { return (int)Math.Round(_j); }
         }
 
         public Coordinate(int i, int j)
@@ -35,18 +47,28 @@ namespace ChineseCheckers
             return (this.i == other.i && this.j == other.j);
         }
 
-        public override int GetHashCode()
-        {
-            int code = 1000000;
-            code = code + (i * 1000);
-            code = code + j;
-            return code;
-        }
+        //public override int GetHashCode()
+        //{
+        //    int code = 1000000;
+        //    code = code + (i * 1000);
+        //    code = code + j;
+        //    return code;
+        //}
 
         public bool Equals(Coordinate other)
         {
             if (other == null) return false;
             return (this.i == other.i && this.j == other.j);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 1654729226;
+            hashCode = hashCode * -1521134295 + _i.GetHashCode();
+            hashCode = hashCode * -1521134295 + _j.GetHashCode();
+            hashCode = hashCode * -1521134295 + i.GetHashCode();
+            hashCode = hashCode * -1521134295 + j.GetHashCode();
+            return hashCode;
         }
     }
 }
